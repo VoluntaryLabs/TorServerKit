@@ -17,9 +17,8 @@
 		AA0F305019B9C9D70010FD4A /* tor in Resources */ = {isa = PBXBuildFile; fileRef = AA0F304F19B9C9D70010FD4A /* tor */; };
 		AA0F305319B9C9FD0010FD4A /* TorProcess.h in Headers */ = {isa = PBXBuildFile; fileRef = AA0F305119B9C9FD0010FD4A /* TorProcess.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AA0F305419B9C9FD0010FD4A /* TorProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0F305219B9C9FD0010FD4A /* TorProcess.m */; };
-		AA0F305719B9CD100010FD4A /* BMProcesses.h in Headers */ = {isa = PBXBuildFile; fileRef = AA0F305519B9CD100010FD4A /* BMProcesses.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AA0F305819B9CD100010FD4A /* BMProcesses.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0F305619B9CD100010FD4A /* BMProcesses.m */; };
 		AAE0D7B819B9E32500D7E85F /* TorServerKit.h in Headers */ = {isa = PBXBuildFile; fileRef = AA0F303119B9C94E0010FD4A /* TorServerKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AAE3D00019E4B8AD00B1B761 /* SystemInfoKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE3CFFD19E4B8A100B1B761 /* SystemInfoKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +28,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = AA0F302019B9C94E0010FD4A;
 			remoteInfo = TorServerKit;
+		};
+		AAE3CFFC19E4B8A100B1B761 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAE3CFF719E4B8A100B1B761 /* SystemInfoKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AAD0C0A519E48B4400B24217;
+			remoteInfo = SystemInfoKit;
+		};
+		AAE3CFFE19E4B8A100B1B761 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAE3CFF719E4B8A100B1B761 /* SystemInfoKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AAD0C0B019E48B4400B24217;
+			remoteInfo = SystemInfoKitTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -50,8 +63,7 @@
 		AA0F304F19B9C9D70010FD4A /* tor */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tor; path = TorServerKit/Vendor/tor; sourceTree = "<group>"; };
 		AA0F305119B9C9FD0010FD4A /* TorProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TorProcess.h; path = Classes/TorProcess.h; sourceTree = "<group>"; };
 		AA0F305219B9C9FD0010FD4A /* TorProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TorProcess.m; path = Classes/TorProcess.m; sourceTree = "<group>"; };
-		AA0F305519B9CD100010FD4A /* BMProcesses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BMProcesses.h; path = Classes/BMProcesses.h; sourceTree = "<group>"; };
-		AA0F305619B9CD100010FD4A /* BMProcesses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BMProcesses.m; path = Classes/BMProcesses.m; sourceTree = "<group>"; };
+		AAE3CFF719E4B8A100B1B761 /* SystemInfoKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SystemInfoKit.xcodeproj; path = submodules/SystemInfoKit/SystemInfoKit.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAE3D00019E4B8AD00B1B761 /* SystemInfoKit.framework in Frameworks */,
 				AA0F302519B9C94E0010FD4A /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,6 +95,7 @@
 				AA0F304F19B9C9D70010FD4A /* tor */,
 				AA0F302A19B9C94E0010FD4A /* TorServerKit */,
 				AA0F303F19B9C94E0010FD4A /* TorServerKitTests */,
+				AAE3CFF719E4B8A100B1B761 /* SystemInfoKit.xcodeproj */,
 				AA0F302319B9C94E0010FD4A /* Frameworks */,
 				AA0F302219B9C94E0010FD4A /* Products */,
 			);
@@ -119,8 +133,6 @@
 		AA0F302A19B9C94E0010FD4A /* TorServerKit */ = {
 			isa = PBXGroup;
 			children = (
-				AA0F305519B9CD100010FD4A /* BMProcesses.h */,
-				AA0F305619B9CD100010FD4A /* BMProcesses.m */,
 				AA0F305119B9C9FD0010FD4A /* TorProcess.h */,
 				AA0F305219B9C9FD0010FD4A /* TorProcess.m */,
 				AA0F303119B9C94E0010FD4A /* TorServerKit.h */,
@@ -157,6 +169,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		AAE3CFF819E4B8A100B1B761 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AAE3CFFD19E4B8A100B1B761 /* SystemInfoKit.framework */,
+				AAE3CFFF19E4B8A100B1B761 /* SystemInfoKitTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -166,7 +187,6 @@
 			files = (
 				AA0F305319B9C9FD0010FD4A /* TorProcess.h in Headers */,
 				AAE0D7B819B9E32500D7E85F /* TorServerKit.h in Headers */,
-				AA0F305719B9CD100010FD4A /* BMProcesses.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +253,12 @@
 			mainGroup = AA0F301719B9C94E0010FD4A;
 			productRefGroup = AA0F302219B9C94E0010FD4A /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = AAE3CFF819E4B8A100B1B761 /* Products */;
+					ProjectRef = AAE3CFF719E4B8A100B1B761 /* SystemInfoKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				AA0F302019B9C94E0010FD4A /* TorServerKit */,
@@ -240,6 +266,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		AAE3CFFD19E4B8A100B1B761 /* SystemInfoKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SystemInfoKit.framework;
+			remoteRef = AAE3CFFC19E4B8A100B1B761 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AAE3CFFF19E4B8A100B1B761 /* SystemInfoKitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = SystemInfoKitTests.xctest;
+			remoteRef = AAE3CFFE19E4B8A100B1B761 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		AA0F301F19B9C94E0010FD4A /* Resources */ = {
@@ -267,7 +310,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA0F305419B9C9FD0010FD4A /* TorProcess.m in Sources */,
-				AA0F305819B9CD100010FD4A /* BMProcesses.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

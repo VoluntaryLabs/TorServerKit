@@ -7,7 +7,7 @@
 //
 
 #import "TorProcess.h"
-#import "BMProcesses.h"
+#import <SystemInfoKit/SystemInfoKit.h>
 
 @implementation TorProcess
 
@@ -25,21 +25,14 @@ static id sharedTorProcess = nil;
 
 - (void)launch
 {
+    [SIProcessKiller sharedSIProcessKiller]; // kill old processes
+    
     // Check for pre-existing process
     NSString *torPidFilePath = [[[self serverDataFolder] stringByAppendingPathComponent:@"tor"] stringByAppendingPathExtension:@"pid"];
+    
     NSString *torPid = [[NSString alloc] initWithContentsOfFile:torPidFilePath encoding:NSUTF8StringEncoding error:NULL];
     
-    if (nil != torPid)
-    {
-        BOOL processExists = [BMProcesses.sharedBMProcesses isProcessRunningWithName:@"tor" pid:[torPid intValue]];
-        if(processExists)
-        {
-            NSLog(@"killing old tor process with pid: %@", torPid);
-            
-            // Kill process
-            kill( [torPid intValue], SIGKILL);
-        }
-    }
+
     
     _torTask = [[NSTask alloc] init];
     _inpipe = [NSPipe pipe];
@@ -49,6 +42,7 @@ static id sharedTorProcess = nil;
     NSString * torPath = [mainBundle pathForResource:@"tor" ofType:@"" inDirectory: @"tor"];
     NSString * torConfigPath = [mainBundle pathForResource:@"torrc" ofType:@"" inDirectory: @"tor"];
     NSString * torDataDirectory = [[self serverDataFolder] stringByAppendingPathComponent: @".tor"];
+    
     [_torTask setLaunchPath:torPath];
     
     NSFileHandle *nullFileHandle = [NSFileHandle fileHandleWithNullDevice];
@@ -75,6 +69,10 @@ static id sharedTorProcess = nil;
     if (![_torTask isRunning])
     {
         NSLog(@"tor task not running after launch");
+    }
+    else
+    {
+        [SIProcessKiller.sharedSIProcessKiller onRestartKillTask:_torTask];
     }
 }
 
