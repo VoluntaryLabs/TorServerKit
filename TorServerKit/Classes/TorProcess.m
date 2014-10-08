@@ -28,7 +28,7 @@ static id sharedTorProcess = nil;
     [SIProcessKiller sharedSIProcessKiller]; // kill old processes
     
     // Check for pre-existing process
-    NSString *torPidFilePath = [[[self serverDataFolder] stringByAppendingPathComponent:@"tor"] stringByAppendingPathExtension:@"pid"];
+    //NSString *torPidFilePath = [[[self serverDataFolder] stringByAppendingPathComponent:@"tor"] stringByAppendingPathExtension:@"pid"];
     
     //NSString *torPid = [[NSString alloc] initWithContentsOfFile:torPidFilePath encoding:NSUTF8StringEncoding error:NULL];
     
@@ -54,7 +54,7 @@ static id sharedTorProcess = nil;
     {
         NSArray *args = [NSArray arrayWithObjects:@"-f", torConfigPath,
                            @"--DataDirectory", torDataDirectory,
-                           @"--PidFile", torPidFilePath,
+                          // @"--PidFile", torPidFilePath,
                            @"--SOCKSPort", self.torPort,
                            nil];
         
@@ -64,7 +64,7 @@ static id sharedTorProcess = nil;
     {
         NSArray *args = [NSArray arrayWithObjects:@"-f", torConfigPath,
                            @"--DataDirectory", torDataDirectory,
-                           @"--PidFile", torPidFilePath,
+                          // @"--PidFile", torPidFilePath,
                             nil
                            ];
         
