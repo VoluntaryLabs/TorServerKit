@@ -30,7 +30,7 @@ static id sharedTorProcess = nil;
     // Check for pre-existing process
     NSString *torPidFilePath = [[[self serverDataFolder] stringByAppendingPathComponent:@"tor"] stringByAppendingPathExtension:@"pid"];
     
-    NSString *torPid = [[NSString alloc] initWithContentsOfFile:torPidFilePath encoding:NSUTF8StringEncoding error:NULL];
+    //NSString *torPid = [[NSString alloc] initWithContentsOfFile:torPidFilePath encoding:NSUTF8StringEncoding error:NULL];
     
 
     
@@ -52,16 +52,23 @@ static id sharedTorProcess = nil;
     
     if (self.torPort)
     {
-        [_torTask setArguments:@[ @"-f", torConfigPath,
-                                  @"--DataDirectory", torDataDirectory,
-                                  @"--PidFile", torPidFilePath,
-                                  @"--SOCKSPort", self.torPort ]];
+        NSArray *args = [NSArray arrayWithObjects:@"-f", torConfigPath,
+                           @"--DataDirectory", torDataDirectory,
+                           @"--PidFile", torPidFilePath,
+                           @"--SOCKSPort", self.torPort,
+                           nil];
+        
+        [_torTask setArguments:args];
     }
     else
     {
-        [_torTask setArguments:@[ @"-f", torConfigPath,
-                                  @"--DataDirectory", torDataDirectory,
-                                  @"--PidFile", torPidFilePath]];
+        NSArray *args = [NSArray arrayWithObjects:@"-f", torConfigPath,
+                           @"--DataDirectory", torDataDirectory,
+                           @"--PidFile", torPidFilePath,
+                            nil
+                           ];
+        
+        [_torTask setArguments:args];
     }
     
     [_torTask launch];
