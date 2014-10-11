@@ -22,7 +22,7 @@
 		<key>4DE41FEEEAE7CC654240CA8A6C6B99C937943D6B</key>
 		<string>../..</string>
 		<key>AE54CF568057E049D07E8D7A462718F01736434E</key>
-		<string>../../submodules/SystemInfoKit/</string>
+		<string>../../submodules/SystemInfoKit</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>ssh://github.com/Voluntarynet/TorServerKit.git</string>
