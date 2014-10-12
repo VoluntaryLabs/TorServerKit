@@ -1,4 +1,3 @@
-
 SocksPort 9060 # Default: Bind to localhost:9050 for local connections.
 Log notice stderr
 ORPort 9002

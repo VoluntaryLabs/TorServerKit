@@ -23,54 +23,76 @@ static id sharedTorProcess = nil;
     return sharedTorProcess;
 }
 
+- (NSBundle *)bundle
+{
+    return [NSBundle bundleForClass:self.class];
+}
+
+- (NSString *)torExePath
+{
+    return [self.bundle pathForResource:@"tor" ofType:@"" inDirectory: @"tor"];
+}
+
+- (NSString *)torConfigPath
+{
+    NSString *config = @"torrc.node";
+    
+    if (self.runAsRelay)
+    {
+        config = @"torrc.relay";
+    }
+
+    return [self.bundle pathForResource:config ofType:@"" inDirectory: @"tor"];
+}
+
+- (NSString *)torDataDirectory
+{
+    //NSString *folderName = @".tor";
+    NSString *folderName = [self.bundle.bundleIdentifier componentsSeparatedByString:@"."].lastObject;
+    NSString *path = [[self serverDataFolder] stringByAppendingPathComponent:folderName];
+    
+    NSError *error;
+    [[NSFileManager defaultManager] createDirectoryAtPath:path
+                              withIntermediateDirectories:YES
+                                               attributes:nil
+                                                    error:&error];
+    return path;
+}
+
 - (void)launch
 {
     [SIProcessKiller sharedSIProcessKiller]; // kill old processes
     
-    // Check for pre-existing process
-    //NSString *torPidFilePath = [[[self serverDataFolder] stringByAppendingPathComponent:@"tor"] stringByAppendingPathExtension:@"pid"];
-    
-    //NSString *torPid = [[NSString alloc] initWithContentsOfFile:torPidFilePath encoding:NSUTF8StringEncoding error:NULL];
-    
-
-    
     _torTask = [[NSTask alloc] init];
+    [_torTask setLaunchPath:self.torExePath];
+    
     _inpipe = [NSPipe pipe];
+    [_torTask setStandardInput: (NSFileHandle *)_inpipe];
     
-    // Set the path to the python executable
-    NSBundle *mainBundle = [NSBundle bundleForClass:self.class];
-    NSString * torPath = [mainBundle pathForResource:@"tor" ofType:@"" inDirectory: @"tor"];
-    NSString * torConfigPath = [mainBundle pathForResource:@"torrc" ofType:@"" inDirectory: @"tor"];
-    NSString * torDataDirectory = [[self serverDataFolder] stringByAppendingPathComponent: @".tor"];
+    NSFileHandle *outFilehandle = [NSFileHandle fileHandleWithNullDevice];
+    if (self.debug)
+    {
+        outFilehandle = [NSFileHandle fileHandleWithStandardOutput];
+    }
     
-    [_torTask setLaunchPath:torPath];
+    [_torTask setStandardOutput:outFilehandle];
+    [_torTask setStandardError:outFilehandle];
     
-    NSFileHandle *nullFileHandle = [NSFileHandle fileHandleWithNullDevice];
-    [_torTask setStandardOutput:nullFileHandle];
-    [_torTask setStandardInput: (NSFileHandle *) _inpipe];
-    [_torTask setStandardError:nullFileHandle];
+    NSMutableArray *args = [NSMutableArray array];
+    
+    [args addObject:@"-f"];
+    [args addObject:self.torConfigPath];
+    
+    [args addObject:@"--DataDirectory"];
+    [args addObject:self.torDataDirectory];
     
     if (self.torPort)
     {
-        NSArray *args = [NSArray arrayWithObjects:@"-f", torConfigPath,
-                           @"--DataDirectory", torDataDirectory,
-                          // @"--PidFile", torPidFilePath,
-                           @"--SOCKSPort", self.torPort,
-                           nil];
-        
-        [_torTask setArguments:args];
-    }
-    else
-    {
-        NSArray *args = [NSArray arrayWithObjects:@"-f", torConfigPath,
-                           @"--DataDirectory", torDataDirectory,
-                          // @"--PidFile", torPidFilePath,
-                            nil
-                           ];
-        
-        [_torTask setArguments:args];
+        [args addObject:@"--SOCKSPort"];
+        [args addObject:self.torPort];
     }
     
+    [_torTask setArguments:args];
     [_torTask launch];
     
     if (![_torTask isRunning])
@@ -85,9 +107,13 @@ static id sharedTorProcess = nil;
 
 - (void)terminate
 {
-    NSLog(@"Killing tor process...");
-    [_torTask terminate];
-    self.torTask = nil;
+    if (self.torTask)
+    {
+        NSLog(@"Killing tor process...");
+        [SIProcessKiller.sharedSIProcessKiller removeKillTask:_torTask];
+        [_torTask terminate];
+        self.torTask = nil;
+    }
 }
 
 - (BOOL)isRunning

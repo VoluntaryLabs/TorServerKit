@@ -14,6 +14,8 @@
 @property (retain, nonatomic) NSString *serverDataFolder;
 @property (retain, nonatomic) NSString *torPort;
 @property (retain, nonatomic) NSPipe *inpipe;
+@property (assign, nonatomic) BOOL debug;
+@property (assign, nonatomic) BOOL runAsRelay; // otherwise runs as a local node
 
 - (void)launch;
 - (void)terminate;
