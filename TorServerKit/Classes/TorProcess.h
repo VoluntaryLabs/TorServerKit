@@ -12,7 +12,7 @@
 
 @property (retain, nonatomic) NSTask *torTask;
 @property (retain, nonatomic) NSString *serverDataFolder;
-@property (retain, nonatomic) NSString *torPort;
+@property (retain, nonatomic) NSNumber *torSocksPort;
 @property (retain, nonatomic) NSPipe *inpipe;
 @property (assign, nonatomic) BOOL debug;
 @property (assign, nonatomic) BOOL runAsRelay; // otherwise runs as a local node

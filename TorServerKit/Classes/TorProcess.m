@@ -86,10 +86,10 @@ static id sharedTorProcess = nil;
     [args addObject:@"--DataDirectory"];
     [args addObject:self.torDataDirectory];
     
-    if (self.torPort)
+    if (self.torSocksPort)
     {
         [args addObject:@"--SOCKSPort"];
-        [args addObject:self.torPort];
+        [args addObject:[NSString stringWithFormat:@"%@", self.torSocksPort]];
     }
     
     [_torTask setArguments:args];
