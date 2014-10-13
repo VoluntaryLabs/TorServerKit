@@ -86,8 +86,13 @@ static id sharedTorProcess = nil;
     [args addObject:@"--DataDirectory"];
     [args addObject:self.torDataDirectory];
     
-    if (self.torSocksPort)
+    //if (self.torSocksPort)
     {
+        if (!self.torSocksPort || ![SINetwork.sharedSINetwork hasOpenPort:self.torSocksPort])
+        {
+            self.torSocksPort = [SINetwork.sharedSINetwork firstOpenPortBetween:@9000 and:@10000];
+        }
+        
         [args addObject:@"--SOCKSPort"];
         [args addObject:[NSString stringWithFormat:@"%@", self.torSocksPort]];
     }
