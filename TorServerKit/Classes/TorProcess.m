@@ -8,6 +8,7 @@
 
 #import "TorProcess.h"
 #import <SystemInfoKit/SystemInfoKit.h>
+#import <FoundationCategoriesKit/FoundationCategoriesKit.h>
 
 @implementation TorProcess
 
@@ -45,11 +46,11 @@ static id sharedTorProcess = nil;
     return [self.bundle pathForResource:config ofType:@"" inDirectory: @"tor"];
 }
 
-- (NSString *)torDataDirectory
+- (NSString *)bundleDataPath
 {
-    //NSString *folderName = @".tor";
-    NSString *folderName = [self.bundle.bundleIdentifier componentsSeparatedByString:@"."].lastObject;
-    NSString *path = [[self serverDataFolder] stringByAppendingPathComponent:folderName];
+    NSString *supportFolder = [[NSFileManager defaultManager] applicationSupportDirectory];
+    NSString *bundleName = [self.bundle.bundleIdentifier componentsSeparatedByString:@"."].lastObject;
+    NSString *path = [supportFolder stringByAppendingPathComponent:bundleName];
     
     NSError *error;
     [[NSFileManager defaultManager] createDirectoryAtPath:path
@@ -70,6 +71,7 @@ static id sharedTorProcess = nil;
     [_torTask setStandardInput: (NSFileHandle *)_inpipe];
     
     NSFileHandle *outFilehandle = [NSFileHandle fileHandleWithNullDevice];
+    
     if (self.debug)
     {
         outFilehandle = [NSFileHandle fileHandleWithStandardOutput];
@@ -84,7 +86,7 @@ static id sharedTorProcess = nil;
     [args addObject:self.torConfigPath];
     
     [args addObject:@"--DataDirectory"];
-    [args addObject:self.torDataDirectory];
+    [args addObject:self.bundleDataPath];
     
     //if (self.torSocksPort)
     {
