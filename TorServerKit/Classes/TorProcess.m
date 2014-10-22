@@ -24,6 +24,15 @@ static id sharedTorProcess = nil;
     return sharedTorProcess;
 }
 
+- (id)init
+{
+    self = [super init];
+    
+    [SIProcessKiller sharedSIProcessKiller]; // kill old processes
+
+    return self;
+}
+
 - (NSBundle *)bundle
 {
     return [NSBundle bundleForClass:self.class];
@@ -60,9 +69,18 @@ static id sharedTorProcess = nil;
     return path;
 }
 
+- (void)removeLockFile
+{
+    NSString *lockPath = [self.bundleDataPath stringByAppendingPathComponent:@"lock"];
+    
+    NSError *error;
+    [[NSFileManager defaultManager] removeItemAtPath:lockPath error:&error];
+    
+}
+
 - (void)launch
 {
-    [SIProcessKiller sharedSIProcessKiller]; // kill old processes
+    [self removeLockFile];
     
     _torTask = [[NSTask alloc] init];
     [_torTask setLaunchPath:self.torExePath];
@@ -102,9 +120,12 @@ static id sharedTorProcess = nil;
     [_torTask setArguments:args];
     [_torTask launch];
     
+    sleep(1);
+    
     if (![_torTask isRunning])
     {
-        NSLog(@"tor task not running after launch");
+        //NSLog(@"tor task not running after launch");
+        [NSException raise:@"tor task not running after launch" format:nil];
     }
     else
     {
