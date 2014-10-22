@@ -120,7 +120,7 @@ static id sharedTorProcess = nil;
     [_torTask setArguments:args];
     [_torTask launch];
     
-    sleep(1);
+    //sleep(1);
     
     if (![_torTask isRunning])
     {
