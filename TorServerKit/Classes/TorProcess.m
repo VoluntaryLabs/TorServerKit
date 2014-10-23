@@ -30,6 +30,10 @@ static id sharedTorProcess = nil;
     
     [SIProcessKiller sharedSIProcessKiller]; // kill old processes
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(terminate)
+                                                 name:NSApplicationWillTerminateNotification
+                                               object:nil];
     return self;
 }
 
@@ -108,7 +112,7 @@ static id sharedTorProcess = nil;
     
     //if (self.torSocksPort)
     {
-        if (!self.torSocksPort || ![SINetwork.sharedSINetwork hasOpenPort:self.torSocksPort])
+        //if (!self.torSocksPort || ![SINetwork.sharedSINetwork hasOpenPort:self.torSocksPort])
         {
             self.torSocksPort = [SINetwork.sharedSINetwork firstOpenPortBetween:@9000 and:@10000];
         }
