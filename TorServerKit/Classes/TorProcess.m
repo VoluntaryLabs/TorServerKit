@@ -119,7 +119,7 @@ static id sharedTorProcess = nil;
     {
         //if (!self.torSocksPort || ![SINetwork.sharedSINetwork hasOpenPort:self.torSocksPort])
         {
-            self.torSocksPort = [SINetwork.sharedSINetwork firstOpenPortBetween:@9000 and:@10000];
+            self.torSocksPort = [SINetwork.sharedSINetwork firstBindablePortBetween:@9000 and:@10000];
         }
         
         [args addObject:@"--SOCKSPort"];
