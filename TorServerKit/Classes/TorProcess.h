@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <SystemInfoKit/SystemInfoKit.h>
 
 @interface TorProcess : NSObject
 
-@property (retain, nonatomic) NSTask *torTask;
+@property (retain, nonatomic) SITask *torTask;
 @property (retain, nonatomic) NSNumber *torSocksPort; // will try to use this and choose another if not avaiable
 @property (retain, nonatomic) NSPipe *inpipe;
 @property (assign, nonatomic) BOOL runAsRelay; // otherwise runs as a local node

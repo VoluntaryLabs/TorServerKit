@@ -7,7 +7,6 @@
 //
 
 #import "TorProcess.h"
-#import <SystemInfoKit/SystemInfoKit.h>
 #import <FoundationCategoriesKit/FoundationCategoriesKit.h>
 
 @implementation TorProcess
@@ -27,13 +26,6 @@ static id sharedTorProcess = nil;
 - (id)init
 {
     self = [super init];
-    
-    [SIProcessKiller sharedSIProcessKiller]; // kill old processes
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(terminate)
-                                                 name:NSApplicationWillTerminateNotification
-                                               object:nil];
     return self;
 }
 
@@ -75,11 +67,9 @@ static id sharedTorProcess = nil;
 
 - (void)removeLockFile
 {
-    NSString *lockPath = [self.bundleDataPath stringByAppendingPathComponent:@"lock"];
-    
     NSError *error;
+    NSString *lockPath = [self.bundleDataPath stringByAppendingPathComponent:@"lock"];
     [[NSFileManager defaultManager] removeItemAtPath:lockPath error:&error];
-    
 }
 
 - (void)launch
@@ -91,7 +81,7 @@ static id sharedTorProcess = nil;
     
     [self removeLockFile];
     
-    _torTask = [[NSTask alloc] init];
+    _torTask = [[SITask alloc] init];
     [_torTask setLaunchPath:self.torExePath];
     
     _inpipe = [NSPipe pipe];
@@ -117,9 +107,10 @@ static id sharedTorProcess = nil;
     
     //if (self.torSocksPort)
     {
-        //if (!self.torSocksPort || ![SINetwork.sharedSINetwork hasOpenPort:self.torSocksPort])
+        //if (!self.torSocksPort || ![SIPort hasOpenPort:self.torSocksPort])
         {
-            self.torSocksPort = [SINetwork.sharedSINetwork firstBindablePortBetween:@9000 and:@10000];
+            SIPort *port = [SIPort portWithNumber:@9000];
+            self.torSocksPort = port.nextBindablePort.portNumber;
         }
         
         [args addObject:@"--SOCKSPort"];
@@ -127,19 +118,8 @@ static id sharedTorProcess = nil;
     }
     
     [_torTask setArguments:args];
+    [_torTask addWaitOnConnectToPortNumber:self.torSocksPort];
     [_torTask launch];
-    
-    //sleep(1);
-    
-    if (![_torTask isRunning])
-    {
-        //NSLog(@"tor task not running after launch");
-        [NSException raise:@"tor task not running after launch" format:nil];
-    }
-    else
-    {
-        [SIProcessKiller.sharedSIProcessKiller onRestartKillTask:_torTask];
-    }
 }
 
 - (void)terminate
