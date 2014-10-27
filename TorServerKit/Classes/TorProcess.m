@@ -127,7 +127,6 @@ static id sharedTorProcess = nil;
     if (self.torTask)
     {
         NSLog(@"Killing tor process...");
-        [SIProcessKiller.sharedSIProcessKiller removeKillTask:_torTask];
         [_torTask terminate];
         self.torTask = nil;
     }
