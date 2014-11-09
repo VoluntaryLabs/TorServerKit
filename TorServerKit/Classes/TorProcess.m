@@ -84,8 +84,8 @@ static id sharedTorProcess = nil;
     _torTask = [[SITask alloc] init];
     [_torTask setLaunchPath:self.torExePath];
     
-    _inpipe = [NSPipe pipe];
-    [_torTask setStandardInput: (NSFileHandle *)_inpipe];
+    //_inpipe = [NSPipe pipe];
+    [_torTask setStandardInput: [NSFileHandle fileHandleWithNullDevice]];
     
     NSFileHandle *outFilehandle = [NSFileHandle fileHandleWithNullDevice];
     
@@ -152,6 +152,40 @@ static id sharedTorProcess = nil;
 - (NSNumber *)kilobytesPerSecondUp
 {
     return nil; // need to add code to grab this from logs?
+}
+
+- (NSString *)binaryVersion
+{
+    if (!_binaryVersion)
+    {
+        NSTask *task = [[NSTask alloc] init];
+        [task setLaunchPath:self.torExePath];
+        
+        NSPipe *outPipe = [NSPipe pipe];
+        
+        NSFileHandle *nullDevice = [NSFileHandle fileHandleWithNullDevice];
+        [task setStandardInput: nullDevice];
+        [task setStandardOutput:[outPipe fileHandleForWriting]];
+        [task setStandardError:nullDevice];
+        
+        NSMutableArray *args = [NSMutableArray array];
+        
+        [args addObject:@"--version"];
+
+        [task setArguments:args];
+        [task launch];
+        [task waitUntilExit];
+        
+        NSData *theData = [outPipe fileHandleForReading].availableData;
+        NSString *result = [[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding];
+        
+        // example output: Tor version 0.2.5.10 (git-42b42605f8d8eac2).
+        _binaryVersion = [result after:@"version"];
+        _binaryVersion = [_binaryVersion before:@"("].strip;
+        return _binaryVersion;
+    }
+    
+    return _binaryVersion;
 }
 
 @end

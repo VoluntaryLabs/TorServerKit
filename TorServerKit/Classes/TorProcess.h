@@ -13,9 +13,11 @@
 
 @property (retain, nonatomic) SITask *torTask;
 @property (retain, nonatomic) NSNumber *torSocksPort; // will try to use this and choose another if not avaiable
-@property (retain, nonatomic) NSPipe *inpipe;
+//@property (retain, nonatomic) NSPipe *inpipe;
 @property (assign, nonatomic) BOOL runAsRelay; // otherwise runs as a local node
 @property (assign, nonatomic) BOOL debug;
+@property (retain, nonatomic) NSString *binaryVersion; // will try to use this and choose another if not avaiable
+
 
 - (void)launch;
 - (void)terminate;
@@ -26,5 +28,7 @@
 - (NSNumber *)currentConnectionCount;
 - (NSNumber *)kilobytesPerSecondDown;
 - (NSNumber *)kilobytesPerSecondUp;
+
+- (NSString *)binaryVersion;
 
 @end
