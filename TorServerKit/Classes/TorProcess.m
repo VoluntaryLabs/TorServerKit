@@ -182,7 +182,6 @@ static id sharedTorProcess = nil;
         // example output: Tor version 0.2.5.10 (git-42b42605f8d8eac2).
         _binaryVersion = [result after:@"version"];
         _binaryVersion = [_binaryVersion before:@"("].strip;
-        return _binaryVersion;
     }
     
     return _binaryVersion;
