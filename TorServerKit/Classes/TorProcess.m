@@ -158,23 +158,36 @@ static id sharedTorProcess = nil;
 {
     if (!_binaryVersion)
     {
+        if (![[NSFileManager defaultManager] fileExistsAtPath:self.torExePath])
+        {
+            return @"error";
+        }
+
         NSTask *task = [[NSTask alloc] init];
         [task setLaunchPath:self.torExePath];
         
         NSPipe *outPipe = [NSPipe pipe];
         
-        NSFileHandle *nullDevice = [NSFileHandle fileHandleWithNullDevice];
-        [task setStandardInput: nullDevice];
-        [task setStandardOutput:[outPipe fileHandleForWriting]];
-        [task setStandardError:nullDevice];
+        [task setStandardInput: [NSFileHandle fileHandleWithNullDevice]];
+        [task setStandardOutput:outPipe];
+        [task setStandardError:outPipe];
         
         NSMutableArray *args = [NSMutableArray array];
         
         [args addObject:@"--version"];
-
         [task setArguments:args];
-        [task launch];
-        [task waitUntilExit];
+        
+        @try
+        {
+            [task launch];
+            [task waitUntilExit];
+        }
+        @catch (NSException *exception)
+        {
+            NSLog(@"%@", exception);
+            [task terminate];
+            return @"error";
+        }
         
         NSData *theData = [outPipe fileHandleForReading].availableData;
         NSString *result = [[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding];
