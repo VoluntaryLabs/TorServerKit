@@ -1,0 +1,6 @@
+SocksPort 9050 # Default: Bind to localhost:9050 for local connections.
+Log notice stderr
+ExitPolicy reject *:* # no exits allowed
+
+HiddenServiceDir ./hidden_service/
+HiddenServicePort 80 127.0.0.1:80
