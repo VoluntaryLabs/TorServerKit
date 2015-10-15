@@ -76,7 +76,7 @@ static id sharedTorProcess = nil;
 {
     if (_torTask)
     {
-        [NSException raise:@"Tor task already running" format:nil];
+        [NSException raise:@"Tor task already running" format:@""];
     }
     
     [self removeLockFile];
